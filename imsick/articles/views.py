@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Article
 from .serializers import ArticleSerializer
+from openai import OpenAI
+
+openai.api_key = 'YOUR_OPENAI_API_KEY'
 
 
 class HospitalAPIView(APIView):
@@ -15,12 +18,41 @@ class HospitalAPIView(APIView):
 
     # 게시물 생성
     def post(self, request):
+
+        # 제목 추출
+        title = request.data.get('title')
+        
+        # 내용 생성
+        content = generate_content_from_title(title)
+
+        # 데이터에 제목과 내용 추가
+        request.data['content'] = content
+        
+        # Serializer 생성
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP.201_CREATED)
-        return Response(serializer.errors, status=status.HTTP.400_BAD_REQUEST)
-    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+def generate_movie_recommendation(title):
+    # OpenAI API를 사용하여 영화 추천 내용 생성
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0125",
+        messages=[
+            {
+                "role": "system",
+                "content": "역할: 의사, 역할: 의사, 작업: 이픈 증상을 기반으로 진단 내용을 제공합니다.",
+            },
+            {"role": "user", "content": title},
+        ],
+    )
+    # 대화에서 시스템의 응답을 추출하여 반환
+    system_response = response['choices'][0]['message']['content']
+    return system_response
+
 class HospitalDetailAPIView(APIView):
     #게시물 상세조회
     def get(self,request,pk):
