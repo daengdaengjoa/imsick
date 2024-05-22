@@ -8,7 +8,7 @@ from .serializers import ArticleSerializer, LikeSerializer
 
 
 class HospitalAPIView(APIView):
-    #로그인 상태
+    # 로그인 상태
     permission_classes = [IsAuthenticated]
 
     # 게시물 전체 조회
@@ -58,7 +58,7 @@ class LikeAPIView(APIView):
 
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
-        if requet.account in article.like.all():
+        if request.account in article.like.all():
             article.likes.remove(request.account)
             return Response("Cancled Like.", status=status.HTTP_200_OK)
         else:
