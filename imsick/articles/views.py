@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import Article, Like
+from .models import Article, Like, Comment
 from .serializers import ArticleSerializer, LikeSerializer
 
 
@@ -50,6 +50,26 @@ class HospitalDetailAPIView(APIView):
         article = get_object_or_404(Article, article_id=pk)
         article.delete()
         return Response(status=status.HTTP_204_NOT_CONTENT)
+    
+    #댓글 생성
+    def post(self, request, article_id):
+        article = self.get_article(article_id)
+        content = request.data.get("content")
+
+        if not content:
+            return Response({"error": "content is required"}, status=stauts.HTTP_400_BAD_REQUEST)
+        
+        comment = Comment.objects.create(
+            content=content,
+            article=article,
+            author=request.account,
+        )
+        return Response({
+            "id": comment.id,
+            "article": comment.article.id,
+            "author": comment.author.id,
+            "content": comment.content,
+        }, status=status.HTTP_201_CREATED)
 
 
 class LikeAPIView(APIView):
@@ -58,6 +78,8 @@ class LikeAPIView(APIView):
 
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
+        
+
         if request.account in article.like.all():
             article.likes.remove(request.account)
             return Response("Cancled Like.", status=status.HTTP_200_OK)
@@ -76,3 +98,53 @@ class LikeAPIView(APIView):
     #     account=request.account
         
     #     like = Like.objects.filter(account=account, article=article).first()
+
+class CommentAPIView(APIView):
+    #로그인 상태
+    permission_classes = [IsAuthenticated]
+    
+    def get_comment(self, comment_id):
+        return get_object_or_404(Comment, id=comment_id)
+    def post(self, request, comment_id):
+        comment = self.get_comment(comment_id)
+        content = request.data.get("content")
+
+        if content is None:
+            return Response({"error": "content is required"}, status-status.HTTP_400_BAD_REQUEST)
+        
+        comment = Comment.objects.create(
+            content=content,
+            parent_comment=comment,
+            author=request.account
+        )
+        return Response({
+            "id": comment.id,
+            "parent_comment": comment.parent_comment.id
+            "author": comment.author.id,
+            "content": comment.content,
+        }, status=status.HTTP_201_CREATED)
+
+    def put(self, request, comment_id):
+        comment = self.get_comment(comment_id)
+        content = request.data.get("content")
+
+        if request.account != comment.author:
+            return Response({"error": "permission denied"}, stauts=status.HTTP_403_FORBIDDEN)
+        
+        if content is None:
+            return Response({"error": "content is required"}, stauts=status.HTTP_400_BAD_REQUEST)
+        
+        comment.content=content
+        comment.save()
+
+        return Response({"message": "comment update successfully"}, status=status.HTTP_200_OK)
+
+    def delete(self, request, comment_id):
+        comment = self.get_comment(comment_id)
+
+        if request.account != comment.author:
+            return Response({"error": "permission denied"}, stauts=status.HTTP_403_FORBIDDEN)
+        
+        comment.delete()
+
+        return Response({"message": "comment delete successfully"}, status=status.HTTP_204_NO_CONTENT)

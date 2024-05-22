@@ -8,6 +8,7 @@ class Article(models.Model):
     content = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles")
 
     def __self__(self):
         return self.title
@@ -24,3 +25,11 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.account} likes {self.article}"
+
+class Comment(models.Model):
+    article = models.ForeignKey(Article, related_name="comments", on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True, related_name="replies")
