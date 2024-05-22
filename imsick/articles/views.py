@@ -62,7 +62,7 @@ class LikeAPIView(APIView):
             article.likes.remove(request.account)
             return Response("Cancled Like.", status=status.HTTP_200_OK)
         else:
-            article.likes.add(request.account):
+            article.likes.add(request.account)
             return Response("Thanks Like.", status=status.HTTP_200_OK)
         # account = request.account
 
