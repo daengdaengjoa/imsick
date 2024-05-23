@@ -2,6 +2,8 @@
 from django.urls import path, include
 from . import views
 
+app_name = ["articles"]
+
 urlpatterns = [
     path("", views.HospitalAPIView.as_view(), name="hospital"),
     path("detail/<int:article_id>/",
