@@ -6,7 +6,6 @@ from .models import Article
 from .serializers import ArticleSerializer
 from openai import OpenAI
 
-openai.api_key = 'YOUR_OPENAI_API_KEY'
 
 
 class HospitalAPIView(APIView):
@@ -37,20 +36,22 @@ class HospitalAPIView(APIView):
 
 
 
-def generate_movie_recommendation(title):
+def generate_content_from_title(title):
     # OpenAI API를 사용하여 영화 추천 내용 생성
-    response = openai.ChatCompletion.create(
+    client = OpenAI(api_key="sk-proj-Ov283oXTYpIj7OHsKy8uT3BlbkFJ8zfQRearxoMnXYP0TkIW")
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
         messages=[
             {
                 "role": "system",
-                "content": "역할: 의사, 역할: 의사, 작업: 이픈 증상을 기반으로 진단 내용을 제공합니다.",
+                "content": "역할: 의사, 역할: 의사, 작업: 아픈 증상을 기반으로 진단 내용과 병명을 제공합니다. 어떤 진료과를 가야하는지 추천합니다.",
             },
             {"role": "user", "content": title},
         ],
     )
     # 대화에서 시스템의 응답을 추출하여 반환
-    system_response = response['choices'][0]['message']['content']
+    print(response.choices[0].message.content)
+    system_response = response.choices[0].message.content
     return system_response
 
 class HospitalDetailAPIView(APIView):
@@ -67,7 +68,8 @@ class HospitalDetailAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP.400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     #게시물 삭제
     def delete(self, request, pk):
