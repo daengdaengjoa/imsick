@@ -148,3 +148,26 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kinjs88@gmail.com'
 EMAIL_HOST_PASSWORD = 'p e j u z q g u e e l g d d w g'
+
+# DEBUG = True
+
+# # 기존 코드...
+
+# # 로그 레벨을 DEBUG로 설정합니다.
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
