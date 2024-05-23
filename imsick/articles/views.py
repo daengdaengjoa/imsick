@@ -38,7 +38,7 @@ class HospitalAPIView(APIView):
 
 def generate_content_from_title(title):
     # OpenAI API를 사용하여 영화 추천 내용 생성
-    client = OpenAI(api_key="sk-proj-Ov283oXTYpIj7OHsKy8uT3BlbkFJ8zfQRearxoMnXYP0TkIW")
+    client = OpenAI(api_key="")
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
         messages=[
