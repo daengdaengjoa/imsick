@@ -9,7 +9,7 @@ from .models import User
 from .serializers import UserCreateSerializer, UserUpdateSerializer, UserPasswordSerializer
 
 
-class UserListAPIView(APIView):
+class UserAPIView(APIView):
     def get_object(self, username):
         return get_object_or_404(User, username=username)
 

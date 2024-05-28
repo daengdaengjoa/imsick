@@ -4,14 +4,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            "email", "name", "nickname", "date_of_birth", "gender", "subscription"
-        ]
-
+        fields = ["email", "name", "nickname", "age", "gender", "point"]
 
 class UserCreateSerializer(UserUpdateSerializer):
     password = serializers.CharField(write_only=True)
@@ -21,7 +17,7 @@ class UserCreateSerializer(UserUpdateSerializer):
         model = User
         fields = [
             "username", "password", "confirm_password", "email", "name",
-            "nickname", "date_of_birth", "gender", "subscription"
+            "nickname", "age", "gender", "point"
         ]
 
     def create(self, validated_data):
@@ -38,9 +34,10 @@ class UserCreateSerializer(UserUpdateSerializer):
         if not password:
             raise serializers.ValidationError("비밀번호를 입력해주세요.")
         if password != confirm_password:
-            raise serializers.ValidationError("비밀번호가 서로 일치하지 않습니다.")
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
         validate_password(password)
         return data
+
 
 
 class UserPasswordSerializer(UserCreateSerializer):
