@@ -12,6 +12,7 @@ class User(AbstractUser):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10)
     age = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=1)
     point =  models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
-    
+    is_staff = models.BooleanField(default=False)
+
 
     REQUIRED_FIELDS = ["name", "nickname", "gender", "age", "point"]

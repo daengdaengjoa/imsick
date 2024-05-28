@@ -2,7 +2,8 @@ from django.urls import path
 from .views import UserAPIView, LogoutView, PasswordUpdateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-app_name = "account"
+app_name = "accounts"
+
 urlpatterns = [
     path("", UserAPIView.as_view(), name="user_list"),
     path("login/", TokenObtainPairView.as_view(), name="login"),
