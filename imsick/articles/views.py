@@ -11,12 +11,6 @@ from openai import OpenAI
 from django.db.models import Q
 
 
-def set_category(instance):
-    if instance.is_staff:
-        return "admin"
-    else:
-        return "review"
-
 
 class PostListAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
