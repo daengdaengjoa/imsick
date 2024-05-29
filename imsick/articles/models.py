@@ -3,12 +3,6 @@ from django.conf import settings
 from accounts.models import User
 
 
-# def get_image_upload_path(instance, filename):
-#     if instance.author.is_staff: 
-#         return f"admins/{filename}"
-#     elif instance.author.is_authenticated:
-#         return f"reviews/{filename}"
-
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()

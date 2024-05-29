@@ -11,12 +11,6 @@ from openai import OpenAI
 from django.db.models import Q
 
 
-def set_category(instance):
-    if instance.is_staff:
-        return "admin"
-    else:
-        return "review"
-
 
 class PostListAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
@@ -177,8 +171,8 @@ def search(request):
     
     
 def generate_content(content):
-    # OpenAI API를 사용하여 영화 추천 내용 생성
-    client = OpenAI(api_key="sk-proj-3qaGizw0U69uY6ifC0p3T3BlbkFJMu5Fyh2yGxADF7uG6VKI")
+    # OpenAI API를 사용하여 내용 생성
+    client = OpenAI(api_key="")
     
     prompt = f"""
     당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 제시합니다.
