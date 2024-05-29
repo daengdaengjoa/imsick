@@ -179,7 +179,7 @@ def search(request):
     
     
 def generate_content(content):
-    # OpenAI API를 사용하여 영화 추천 내용 생성
+    # OpenAI API를 사용하여 내용 생성
     client = OpenAI(api_key="")
     
     prompt = f"""
