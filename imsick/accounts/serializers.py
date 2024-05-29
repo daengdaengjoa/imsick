@@ -56,7 +56,7 @@ class UserPasswordSerializer(UserCreateSerializer):
         if not password:
             raise serializers.ValidationError("비밀번호를 입력해주세요.")
         if password != confirm_password:
-            raise serializers.ValidationError("비밀번호가 서로 일치하지 않습니다.")
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
         validate_password(password)
         return data
 
