@@ -25,7 +25,8 @@ class PostListAPIView(generics.ListCreateAPIView):
     
     def post(self, request):
         author = request.user
-        
+        age = request.user.age
+        print(age)
         # 질문 추출
         content = request.data.get('content')
         
@@ -100,13 +101,12 @@ class CommentListAPIView(generics.ListCreateAPIView):
     
     def post(self, request, post_pk, comment_pk=None):
         author = request.user
-        print(author)
         post = get_object_or_404(Post, pk=post_pk)
         if comment_pk:
             comment = get_object_or_404(Comment, pk=comment_pk)
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
-                serializer.save(author=author, post_id=post, is_reply=True)
+                serializer.save(author=author, post_id=post, is_reply=True, comment_id=comment)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             serializer = CommentSerializer(data=request.data)
@@ -174,13 +174,11 @@ def search(request):
     else:
         print("No query parameter provided.")  # 검색어가 제공되지 않은 경우
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    
     
     
 def generate_content(content):
     # OpenAI API를 사용하여 영화 추천 내용 생성
-    client = OpenAI(api_key="")
+    client = OpenAI(api_key="sk-proj-3qaGizw0U69uY6ifC0p3T3BlbkFJMu5Fyh2yGxADF7uG6VKI")
     
     prompt = f"""
     당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 제시합니다.

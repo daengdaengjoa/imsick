@@ -11,6 +11,10 @@ class CommentSerializer(serializers.ModelSerializer):
             "created_at",
             "is_reply"
         ]
+        extra_kwargs = {
+            'author': {'required': False},
+            'is_reply': {'required': False}
+        }    
 
 class PostSerializer(serializers.ModelSerializer):
 

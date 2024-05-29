@@ -29,7 +29,7 @@ class Comment(models.Model):
     comment_likes = models.ManyToManyField(User,related_name="comment_likes")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    
     is_reply = models.BooleanField()
     comment_id = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", null=True, blank=True)
     
