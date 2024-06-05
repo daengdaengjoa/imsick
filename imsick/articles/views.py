@@ -20,8 +20,8 @@ class PostListAPIView(generics.ListCreateAPIView):
     def post(self, request):
         author = request.user
 
-        if author.point < 20:
-            return Response({"detail": "포인트가 부족합니다. 게시물을 작성하려면 최소 20포인트가 필요합니다."}, status=status.HTTP_403_FORBIDDEN)
+        if author.point < 50:
+            return Response({"detail": "포인트가 부족합니다. 게시물을 작성하려면 최소 50포인트가 필요합니다."}, status=status.HTTP_403_FORBIDDEN)
         
         # 질문 추출
         content = request.data.get('content')
