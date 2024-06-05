@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -214,3 +214,15 @@ def generate_content(content):
     print(response.choices[0].message.content)
     system_response = response.choices[0].message.content
     return system_response
+
+def list(request):
+		return render(request, "articles/list.html")
+
+def main(request):
+		return render(request, "articles/main.html")
+
+def datathrow(request):
+		return render(request, "articles/datathrow.html")
+
+def post(request):
+		return render(request, "articles/post.html")

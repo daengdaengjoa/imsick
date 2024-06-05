@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 상세 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .meta-info {
+            text-align: right;
+        }
+
+        .meta-info span {
+            margin-left: 10px;
+        }
+
+        .content {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .ai-response {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .like-button {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            position: absolute;
+            right: 10px;
+            margin-top: 15px;
+        }
+
+        .like-button:hover {
+            background-color: #0056b3;
+        }
+
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        .comments-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .comment {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .comment .like-button {
+            background-color: transparent;
+            color: black;
+            border: 1px solid black;
+            position: absolute;
+            right: 10px;
+            margin-top: -10px;
+            font-size: 12px;
+        }
+
+        .comment .like-button:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+
+        .comment .reply-button {
+            background-color: transparent;
+            color: black;
+            border: 1px solid black;
+            position: absolute;
+            right: 80px; /* 위치를 왼쪽으로 이동 */
+            margin-top: -10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .comment .reply-button:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+
+        .reply-section {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .reply-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            resize: vertical;
+            height: 60px;
+        }
+
+        .reply-section button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reply-section button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-comment {
+            margin-top: 20px;
+        }
+
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            resize: vertical;
+            height: 100px;
+        }
+
+        .add-comment button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-comment button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <header> 
+        {% include 'accounts/header.html' %}
+    </header>
+    <div class="container">
+        <div class="title-container">
+            <div class="title">글 제목</div>
+            <div class="meta-info">
+                <span>닉네임: 사용자</span>
+                <span>게시날짜: 2024-06-04</span>
+            </div>
+        </div>
+        <div class="content">
+            이곳에 글 내용이 표시됩니다.
+        </div>
+        <div class="ai-response">
+            <h3>AI 답변</h3>
+            <p>이곳에 AI 답변이 표시됩니다.</p>
+            <div class="like-button">좋아요</div>
+        </div>
+        <div class="comments-section">
+            <h3>댓글</h3>
+            <div class="comment">
+                이것은 댓글입니다.
+                <div class="like-button">좋아요</div>
+                <div class="reply-button" onclick="toggleReplySection(this)">답글</div>
+                <div class="reply-section">
+                    <textarea placeholder="대댓글을 입력하세요..."></textarea>
+                    <button type="button">대댓글 등록</button>
+                </div>
+            </div>
+            <div class="comment">
+                또 다른 댓글입니다.
+                <div class="like-button">좋아요</div>
+                <div class="reply-button" onclick="toggleReplySection(this)">답글</div>
+                <div class="reply-section">
+                    <textarea placeholder="대댓글을 입력하세요..."></textarea>
+                    <button type="button">대댓글 등록</button>
+                </div>
+            </div>
+        </div>
+        <div class="add-comment">
+            <textarea placeholder="댓글을 입력하세요..."></textarea>
+            <button type="button">댓글 등록</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleReplySection(element) {
+            const replySection = element.nextElementSibling;
+            if (replySection.style.display === "none" || replySection.style.display === "") {
+                replySection.style.display = "block";
+            } else {
+                replySection.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

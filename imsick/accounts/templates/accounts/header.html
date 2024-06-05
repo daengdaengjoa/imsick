@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            z-index: 1000; /* Ensure the header is above other content */
+        }
+
+        .imsick-button {
+            font-size: 24px;
+            background-color: white;
+            color: #28a745; /* 연두색 */
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .imsick-button:hover {
+            background-color: #e8f5e9;
+        }
+
+        .right-buttons {
+            margin-right: 40px; /* 오른쪽 여백 추가 */
+        }
+
+        .right-buttons button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .right-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-top: 80px; /* Add padding top to avoid content being hidden under the fixed header */
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .post-list {
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
+
+        .footer button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="imsick-button" onclick="window.location.href='http://127.0.0.1:8000/api/articles/main/'">IMSICK</button>
+        <div class="right-buttons">
+            <button type="button" onclick="location.href='http://127.0.0.1:8000/api/accounts/log/'">로그인</button>
+            <button type="button" onclick="location.href='http://127.0.0.1:8000/api/accounts/signup/'">회원가입</button>
+        </div>
+    </div>
+    </div>
+    <div class="footer">
+        <button type="button" onclick="location.href='http://127.0.0.1:8000/api/articles/datathrow/'">+</button>
+    </div>
+</body>
+</html>

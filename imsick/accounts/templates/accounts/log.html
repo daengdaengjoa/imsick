@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .login-container {
+            width: 300px;
+            margin: 100px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+                body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            z-index: 1000; /* Ensure the header is above other content */
+        }
+
+        .imsick-button {
+            font-size: 24px;
+            background-color: white;
+            color: #28a745; /* 연두색 */
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .imsick-button:hover {
+            background-color: #e8f5e9;
+        }
+
+        .right-buttons {
+            margin-right: 40px; /* 오른쪽 여백 추가 */
+        }
+
+        .right-buttons button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .right-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-top: 80px; /* Add padding top to avoid content being hidden under the fixed header */
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .post-list {
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
+
+        .footer button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    {% include 'accounts/header.html' %}
+    
+    <div class="login-container">
+        <h2>로그인</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">아이디:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">로그인</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("login-form");
+        
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+        
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+        
+                // 여기서 로그인 처리를 수행하면 됩니다.
+                // 예를 들어, 백엔드 서버로 요청을 보내거나, 로컬 스토리지에서 확인하는 등의 방법이 있습니다.
+                // 이 예제에서는 간단하게 콘솔에 출력하는 것으로 대체합니다.
+                console.log("아이디:", username);
+                console.log("비밀번호:", password);
+        
+                // 로그인 성공 후에는 다음 동작을 수행하십시오.
+                // 예: 페이지 이동, 다른 액션 실행 등
+            });
+        });
+    </script>
+</body>
+</html>

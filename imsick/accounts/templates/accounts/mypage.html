@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 10px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header button {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .header .imsick-button {
+            font-size: 24px;
+            background-color: #fff; /* 초록색 */
+            color: #28a745;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .header .imsick-button:hover {
+            background-color: #e8f5e9;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .section {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .post-list, .liked-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .post-list li, .liked-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .post-list li:last-child, .liked-list li:last-child {
+            border-bottom: none;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #218838;
+        }
+
+        .imsick-button {
+            font-size: 24px;
+            background-color: #e8f5e9; /* 연두색 */
+            color: #28a745;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .imsick-button:hover {
+            background-color: #c8e6c9;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="imsick-button" onclick="window.location.href='http://127.0.0.1:8000/api/articles/main/'">IMSICK</button>
+        <h1>내 정보</h1>
+        <div class="right-buttons">
+            <button onclick="location.href='http://127.0.0.1:8000/api/articles/main/'">로그아웃</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>내가 쓴 글</h2>
+            <ul class="post-list" id="post-list">
+                <!-- 내가 쓴 글 목록이 여기에 추가됩니다 -->
+            </ul>
+        </div>
+        <div class="section">
+            <h2>내 보유 포인트</h2>
+            <p id="points">0</p>
+        </div>
+        <div class="section">
+            <h2>내가 좋아요 누른 글</h2>
+            <ul class="liked-list" id="liked-list">
+                <!-- 내가 좋아요 누른 글 목록이 여기에 추가됩니다 -->
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        <button type="button" onclick="location.href='http://127.0.0.1:8000/api/articles/datathrow/'">+</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 예제 데이터
+            const posts = [
+                { title: "내가 쓴 첫 번째 글" },
+                { title: "내가 쓴 두 번째 글" },
+                { title: "내가 쓴 세 번째 글" }
+            ];
+            const points = 1200;
+            const likedPosts = [
+                { title: "좋아요 누른 첫 번째 글" },
+                { title: "좋아요 누른 두 번째 글" },
+                { title: "좋아요 누른 세 번째 글" }
+            ];
+
+            // 내가 쓴 글 목록 추가
+            const postList = document.getElementById("post-list");
+            posts.forEach(post => {
+                const li = document.createElement("li");
+                li.textContent = post.title;
+                postList.appendChild(li);
+            });
+
+            // 보유 포인트 설정
+            const pointsElement = document.getElementById("points");
+            pointsElement.textContent = points + " 포인트";
+
+            // 좋아요 누른 글 목록 추가
+            const likedList = document.getElementById("liked-list");
+            likedPosts.forEach(post => {
+                const li = document.createElement("li");
+                li.textContent = post.title;
+                likedList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

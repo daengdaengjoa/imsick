@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .imsick-button {
+            font-size: 24px;
+            background-color: white;
+            color: #28a745; /* 연두색 */
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .imsick-button:hover {
+            background-color: #e8f5e9;
+        }
+
+        .header .right-buttons button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .header .right-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .post-list {
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-link {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .post-link:hover {
+            text-decoration: underline;
+        }
+
+        .post-meta {
+            text-align: right;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .footer {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
+
+        .footer button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="imsick-button" onclick="window.location.href='http://127.0.0.1:8000/api/articles/main/'">IMSICK</button>
+        <div class="right-buttons">
+            <button type="button" onclick="location.href='http://127.0.0.1:8000/api/accounts/log/'">로그인</button>
+            <button type="button" onclick="location.href='http://127.0.0.1:8000/api/accounts/signup/'">회원가입</button>
+        </div>
+    </div>
+    <div class="content">
+        <div class="post-list">
+            <h2>저는 이곳이 아픕니다</h2>
+            <!-- 글 목록이 여기에 표시됩니다 -->
+            <div class="post-item">
+                <a href="http://127.0.0.1:8000/api/articles/post/" class="post-link">게시물 예시</a>
+                <div class="post-meta">
+                    <div>작성자: 사용자</div>
+                    <div>날짜: 2024-06-04</div>
+                </div>
+            </div>
+            <!-- 추가 게시물 항목은 위의 구조를 따라 작성 -->
+        </div>
+    </div>
+    <div class="footer">
+        <button type="button" onclick="location.href='http://127.0.0.1:8000/api/articles/datathrow/'">+</button>
+    </div>
+</body>
+</html>

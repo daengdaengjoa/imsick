@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아픈 곳 AI 상담</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #F0F0F0;
+            font-size: 18px; /* 폰트 크기 증가 */
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px; /* 패딩 증가 */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 그림자 크기 증가 */
+            max-width: 600px; /* 최대 너비 설정 */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin-bottom: 20px; /* 마진 증가 */
+        }
+        label {
+            display: block;
+            margin-bottom: 10px; /* 마진 증가 */
+        }
+        .inline-label {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px; /* 패딩 증가 */
+            box-sizing: border-box;
+            font-size: 18px; /* 폰트 크기 증가 */
+        }
+        .note {
+            font-size: 12px; /* 작은 글자 크기 */
+            color: #666; /* 연한 색 */
+            margin-top: 10px; /* 마진 상단 추가 */
+        }
+        button {
+            padding: 15px 20px; /* 패딩 증가 */
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px; /* 폰트 크기 증가 */
+        }
+        button:hover {
+            background-color: #0056B3;
+        }
+        .response {
+            margin-top: 30px; /* 마진 증가 */
+            padding: 20px; /* 패딩 증가 */
+            background-color: #E9ECEF;
+            border-radius: 5px;
+            font-size: 18px; /* 폰트 크기 증가 */
+        }
+        .link {
+            margin-top: 30px; /* 마진 증가 */
+            display: block;
+            text-align: center;
+            font-size: 18px; /* 폰트 크기 증가 */
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'accounts/header.html' %}
+
+    <div class="container">
+        <h1>아픈 곳 AI 상담</h1>
+        <div class="form-group">
+            <label for="symptom">
+                어디가 아프신가요?
+                <span class="inline-label">(기본적으로 비밀글로 나가게 됩니다)</span>
+            </label>
+            <input type="text" id="symptom" name="symptom" placeholder="예: 머리가 아파요">
+            <div class="checkbox-group">
+                <input type="checkbox" id="public" name="public">
+                <label for="public">전체 공개 여부</label>
+            </div>
+        </div>
+        <button onclick="getResponse()">AI에게 물어보기</button>
+        <div id="response" class="response" style="display:none;"></div>
+    </div>
+    <script>
+        async function getResponse() {
+            const symptom = document.getElementById('symptom').value;
+            const isPublic = document.getElementById('public').checked;
+            const responseDiv = document.getElementById('response');
+            if (!symptom) {
+                alert("아픈 곳을 입력해주세요.");
+                return;
+            }
+            try {
+                const response = await fetch('YOUR_SERVER_ENDPOINT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ symptom, public: isPublic })
+                });
+                const data = await response.json();
+                responseDiv.style.display = 'block';
+                responseDiv.innerText = data.reply;
+                // 서버에 진단 목록 저장
+                await fetch('YOUR_SAVE_ENDPOINT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ symptom, reply: data.reply, public: isPublic })
+                });
+            } catch (error) {
+                responseDiv.style.display = 'block';
+                responseDiv.innerText = '서버와 통신 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
+            }
+        }
+    </script>
+</body>
+</html>
