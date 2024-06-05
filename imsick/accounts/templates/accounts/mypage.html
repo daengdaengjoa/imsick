@@ -152,40 +152,46 @@
     <div class="footer">
         <button type="button" onclick="location.href='http://127.0.0.1:8000/api/articles/datathrow/'">+</button>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 예제 데이터
-            const posts = [
-                { title: "내가 쓴 첫 번째 글" },
-                { title: "내가 쓴 두 번째 글" },
-                { title: "내가 쓴 세 번째 글" }
-            ];
-            const points = 1200;
-            const likedPosts = [
-                { title: "좋아요 누른 첫 번째 글" },
-                { title: "좋아요 누른 두 번째 글" },
-                { title: "좋아요 누른 세 번째 글" }
-            ];
+        document.addEventListener("DOMContentLoaded", async function() {
+            try {
+                // 예제 데이터
+                const posts = [
+                    { title: "내가 쓴 첫 번째 글" },
+                    { title: "내가 쓴 두 번째 글" },
+                    { title: "내가 쓴 세 번째 글" }
+                ];
+                const points = 1200;
+                const likedPosts = [
+                    { title: "좋아요 누른 첫 번째 글" },
+                    { title: "좋아요 누른 두 번째 글" },
+                    { title: "좋아요 누른 세 번째 글" }
+                ];
 
-            // 내가 쓴 글 목록 추가
-            const postList = document.getElementById("post-list");
-            posts.forEach(post => {
-                const li = document.createElement("li");
-                li.textContent = post.title;
-                postList.appendChild(li);
-            });
+                // 내가 쓴 글 목록 추가
+                const postList = document.getElementById("post-list");
+                posts.forEach(post => {
+                    const li = document.createElement("li");
+                    li.textContent = post.title;
+                    postList.appendChild(li);
+                });
 
-            // 보유 포인트 설정
-            const pointsElement = document.getElementById("points");
-            pointsElement.textContent = points + " 포인트";
+                // 보유 포인트 설정
+                const pointsElement = document.getElementById("points");
+                pointsElement.textContent = points + " 포인트";
 
-            // 좋아요 누른 글 목록 추가
-            const likedList = document.getElementById("liked-list");
-            likedPosts.forEach(post => {
-                const li = document.createElement("li");
-                li.textContent = post.title;
-                likedList.appendChild(li);
-            });
+                // 좋아요 누른 글 목록 추가
+                const likedList = document.getElementById("liked-list");
+                likedPosts.forEach(post => {
+                    const li = document.createElement("li");
+                    li.textContent = post.title;
+                    likedList.appendChild(li);
+                });
+            } catch (error) {
+                console.error("데이터를 불러오는 동안 오류가 발생했습니다:", error);
+            }
         });
     </script>
 </body>

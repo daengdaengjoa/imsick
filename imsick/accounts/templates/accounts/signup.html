@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,6 +75,7 @@
     <div class="signup-form">
         <h2>회원가입</h2>
         <form id="signupForm">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="username">아이디</label>
                 <input type="text" id="username" name="username" required>
@@ -88,10 +92,7 @@
                 <label for="nickname">닉네임</label>
                 <input type="nickname" id="nickname" name="nickname" required>
             </div>
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+
             <div class="form-group">
                 <label for="age">나이</label>
                 <input type="number" id="age" name="age" required>
@@ -111,18 +112,30 @@
         </form>
     </div>
 
-    <!-- <script>
-        // JavaScript 코드 작성 가능 (예: 폼 제출 이벤트 핸들링 등)
+    <script>
         document.getElementById('signupForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            
             // 폼 데이터를 가져와서 처리할 수 있습니다.
             const formData = new FormData(event.target);
             const data = Object.fromEntries(formData.entries());
-            console.log(data);
 
+            // Axios를 사용하여 회원가입을 처리합니다.
+        
+        axios.post('http://127.0.0.1:8000/api/accounts/', data, {
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(function(response) {
+            // 회원가입 성공 시 처리할 코드를 여기에 작성합니다.
+            console.log('회원가입 성공:', response.data);
             alert('회원가입이 완료되었습니다!');
-            // 여기서 서버로 데이터를 전송하는 코드를 추가할 수 있습니다.
-        }); -->
-    </script>
-</body>
-</html>
+            // 예: 페이지 이동, 세션 설정 등
+        })
+        .catch(function(error) {
+            // 회원가입 실패 시 처리할 코드를 여기에 작성합니다.
+            console.error('회원가입 실패:', error);
+            alert('회원가입에 실패했습니다.');
+        });
+

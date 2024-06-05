@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아픈 곳 AI 상담</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,23 +114,18 @@
                 return;
             }
             try {
-                const response = await fetch('YOUR_SERVER_ENDPOINT', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ symptom, public: isPublic })
+                //실제로 사용하는 AI 서비스의 엔드포인트 주소
+                const response = await axios.post('http://127.0.0.1:8000/api/articles/', {
+                    symptom,
+                    public: isPublic
                 });
-                const data = await response.json();
                 responseDiv.style.display = 'block';
-                responseDiv.innerText = data.reply;
-                // 서버에 진단 목록 저장
-                await fetch('YOUR_SAVE_ENDPOINT', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ symptom, reply: data.reply, public: isPublic })
+                responseDiv.innerText = response.data.reply;
+                // 서버에 진단 목록 저장하는 서버 엔드포인트
+                await axios.post('http://127.0.0.1:8000/api/articles/', {
+                    symptom,
+                    reply: response.data.reply,
+                    public: isPublic
                 });
             } catch (error) {
                 responseDiv.style.display = 'block';
