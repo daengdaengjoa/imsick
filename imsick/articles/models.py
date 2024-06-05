@@ -14,6 +14,8 @@ class Post(models.Model):
     like_counts = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False)
+
 
 class Comment(models.Model):
     content = models.TextField()

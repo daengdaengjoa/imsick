@@ -19,8 +19,10 @@ class PostListAPIView(generics.ListCreateAPIView):
     
     def post(self, request):
         author = request.user
-        age = request.user.age
-        print(age)
+
+        if author.point < 20:
+            return Response({"detail": "포인트가 부족합니다. 게시물을 작성하려면 최소 20포인트가 필요합니다."}, status=status.HTTP_403_FORBIDDEN)
+        
         # 질문 추출
         content = request.data.get('content')
         
@@ -31,18 +33,36 @@ class PostListAPIView(generics.ListCreateAPIView):
         request.data['content_ai'] = content_ai
 
         serializer = PostSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(author=author, category=set_category(author))
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
+        
+        # if serializer.is_valid(raise_exception=True):
+        #     serializer.save(author=author, category=set_category(author))
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        
+        if serializer.is_valid(raise_exception=True):
+            # 게시 여부 설정
+            is_published = request.data.get('is_published', False)
+            serializer.save(author=author, is_published=is_published)
+            author.point -= 20
+            # 게시된 경우 점수 추가
+            if is_published:
+                author.point += 10
+                author.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
         
         
         
 class PostDetailAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    # def get_object(self, post_pk):
+    #     return get_object_or_404(Post, id=post_pk)
     def get_object(self, post_pk):
-        return get_object_or_404(Post, id=post_pk)
+        return get_object_or_404(Post, id=post_pk, is_published=True)
+
 
     def get(self, request, post_pk):
         post = self.get_object(post_pk)
@@ -172,7 +192,7 @@ def search(request):
     
 def generate_content(content):
     # OpenAI API를 사용하여 내용 생성
-    client = OpenAI(api_key="")
+    client = OpenAI(api_key="sk-proj-HtluDp9jfzVINhKsSQCFT3BlbkFJh3NGRMDGBMinF2GHBdBx")
     
     prompt = f"""
     당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 제시합니다.

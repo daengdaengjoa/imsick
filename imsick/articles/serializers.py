@@ -28,6 +28,7 @@ class PostSerializer(serializers.ModelSerializer):
             "category",
             "view_count",
             "like_counts",
+            "is_published",
         ]
         read_only_fields = ["author", "category",]
 
