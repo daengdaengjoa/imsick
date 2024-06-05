@@ -44,7 +44,7 @@ class PostListAPIView(generics.ListCreateAPIView):
             # 게시 여부 설정
             is_published = request.data.get('is_published', False)
             serializer.save(author=author, is_published=is_published)
-            author.point -= 30
+            author.point -= 50
             # 게시된 경우 점수 추가
             if is_published:
                 author.point += 10
