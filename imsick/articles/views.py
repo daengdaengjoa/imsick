@@ -205,47 +205,47 @@ def generate_content(content):
     print(content_tr.text)
     
     # 위급 상황 경고 시스템
-    emergency_conditions = ["가슴 통증", "호흡 곤란", "심한 출혈"]
+    emergency_conditions = ["chest pain", "shortness of breath", "severe bleeding"]
     emergency_alert = any(cond in content for cond in emergency_conditions)
     
     prompt = f"""
-    당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 퍼센티지와 함께 제시합니다.
+    You are a doctor. The user describes their symptoms, and you provide possible diagnoses with percentages, recommend hospitals with percentages, and give your opinion.
 
-    **사용자:**
-    - 주요 증상 (예: 두통, 복통, 발진 등)
-    - 증상의 위치 (예: 머리, 복부, 피부 등)
-    - 증상의 강도 (예: 경미함, 중간, 심함)
-    - 증상이 시작된 시기와 지속 기간
-    - 증상을 악화시키거나 완화시키는 요인
-    - 기타 관련 증상 (예: 발열, 구토, 피로 등)
+    **User:**
+    - Main symptoms (e.g., headache, abdominal pain, rash)
+    - Location of symptoms (e.g., head, abdomen, skin)
+    - Severity of symptoms (e.g., mild, moderate, severe)
+    - Start and duration of symptoms
+    - Factors that worsen or alleviate symptoms
+    - Other related symptoms (e.g., fever, vomiting, fatigue)
 
-    **응답:**
-    - 가능한 진단명:
-    - 추천 병원과:
-    - 소견:
-    - 위급 상황 경고: {"있음" if emergency_alert else "없음"}
+    **Response:**
+    - Possible diagnoses with probabilities:
+    - Recommended hospitals:
+    - Opinion:
+    - Emergency alert: {"Yes" if emergency_alert else "No"}
 
-    **예시 입력:**
-    - 두통이 3일째 계속되고 있으며, 강도가 점점 심해지고 있습니다. 특히 아침에 일어날 때 더 심합니다. 또한, 목 뒤쪽이 뻣뻣하고, 빛에 민감해졌습니다.
+    **Example Input:**
+    - I have had a headache for 3 days, and the intensity is increasing. It is worse in the morning when I wake up. My neck is stiff, and I have become sensitive to light.
 
-    **예시 출력:**
-    - 가능한 진단명 및 확률:
-        - 편두통: 60%
-        - 긴장성 두통: 30%
-        - 뇌수막염: 10%
+    **Example Output:**
+    - Possible diagnoses and probabilities:
+        - Migraine: 60%
+        - Tension headache: 30%
+        - Meningitis: 10%
     
-    - 추천 병원과: 
-        - 신경과: 70%
-        - 내과: 30%
+    - Recommended hospitals: 
+        - Neurology: 70%
+        - Internal Medicine: 30%
     
-    - 소견: 두통이 지속되고 강도가 증가하는 경우, 특히 목의 뻣뻣함과 빛에 민감한 증상이 동반되는 경우, 이는 심각한 상태일 수 있으므로 빠른 시일 내에 신경과를 방문하는 것이 좋습니다. 필요시 CT나 MRI와 같은 추가 검사가 필요할 수 있습니다.
-    - 위급 상황 경고: 있음
+    - Opinion: Persistent and worsening headache, especially with neck stiffness and light sensitivity, could be a serious condition. Visiting a neurologist as soon as possible is recommended. Additional tests such as CT or MRI may be needed.
+    - Emergency alert: Yes
     
-    **사용자의 입력:**
-    {content_tr}
+    **User Input:**
+    {content_tr.text}
 
-    **응답:**
-    """    
+    **Response:**
+    """
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
@@ -259,6 +259,6 @@ def generate_content(content):
     content_ai = translator.translate_text(response.choices[0].message.content, target_lang="KO")
     print(content_ai)
 
-    system_response = response.choices[0].message.content
+    system_response = content_ai
     return system_response
 
