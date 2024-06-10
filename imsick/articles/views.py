@@ -9,7 +9,10 @@ from .models import Post, Comment
 from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 from openai import OpenAI
 from django.db.models import Q
-
+import deepl
+import re
+import matplotlib.pyplot as plt
+from collections import defaultdict
 
 
 class PostListAPIView(generics.ListCreateAPIView):
@@ -31,6 +34,7 @@ class PostListAPIView(generics.ListCreateAPIView):
 
         # 데이터에 내용 추가
         request.data['content_ai'] = content_ai
+        
 
         serializer = PostSerializer(data=request.data)
         
@@ -192,10 +196,20 @@ def search(request):
     
 def generate_content(content):
     # OpenAI API를 사용하여 내용 생성
-    client = OpenAI(api_key="sk-proj-HtluDp9jfzVINhKsSQCFT3BlbkFJh3NGRMDGBMinF2GHBdBx")
+    client = OpenAI(api_key="sk-proj-qy720qAAX3ZeyC36IVAeT3BlbkFJNbOjuVWVnKmTbV7wGmKK")
+    
+    auth_key = "37093b85-16f8-4819-982f-455ef40922d3:fx"
+    translator = deepl.Translator(auth_key)
+    content_tr = translator.translate_text(content, target_lang="EN-US")
+
+    print(content_tr.text)
+    
+    # 위급 상황 경고 시스템
+    emergency_conditions = ["가슴 통증", "호흡 곤란", "심한 출혈"]
+    emergency_alert = any(cond in content for cond in emergency_conditions)
     
     prompt = f"""
-    당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 제시합니다.
+    당신은 의사입니다. 사용자가 자신의 증상을 설명하면 가능한 진단명과 추천 병원과, 그리고 소견을 퍼센티지와 함께 제시합니다.
 
     **사용자:**
     - 주요 증상 (예: 두통, 복통, 발진 등)
@@ -209,17 +223,26 @@ def generate_content(content):
     - 가능한 진단명:
     - 추천 병원과:
     - 소견:
+    - 위급 상황 경고: {"있음" if emergency_alert else "없음"}
 
     **예시 입력:**
     - 두통이 3일째 계속되고 있으며, 강도가 점점 심해지고 있습니다. 특히 아침에 일어날 때 더 심합니다. 또한, 목 뒤쪽이 뻣뻣하고, 빛에 민감해졌습니다.
 
     **예시 출력:**
-    - 가능한 진단명: 편두통, 긴장성 두통, 뇌수막염 등
-    - 추천 병원과: 신경과 또는 내과
+    - 가능한 진단명 및 확률:
+        - 편두통: 60%
+        - 긴장성 두통: 30%
+        - 뇌수막염: 10%
+    
+    - 추천 병원과: 
+        - 신경과: 70%
+        - 내과: 30%
+    
     - 소견: 두통이 지속되고 강도가 증가하는 경우, 특히 목의 뻣뻣함과 빛에 민감한 증상이 동반되는 경우, 이는 심각한 상태일 수 있으므로 빠른 시일 내에 신경과를 방문하는 것이 좋습니다. 필요시 CT나 MRI와 같은 추가 검사가 필요할 수 있습니다.
-
+    - 위급 상황 경고: 있음
+    
     **사용자의 입력:**
-    {content}
+    {content_tr}
 
     **응답:**
     """    
@@ -230,7 +253,12 @@ def generate_content(content):
             {"role": "user", "content": prompt},
         ],
     )
-    # 대화에서 시스템의 응답을 추출하여 반환
+    
     print(response.choices[0].message.content)
+    
+    content_ai = translator.translate_text(response.choices[0].message.content, target_lang="KO")
+    print(content_ai)
+
     system_response = response.choices[0].message.content
     return system_response
+
