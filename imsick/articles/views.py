@@ -10,9 +10,6 @@ from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 from openai import OpenAI
 from django.db.models import Q
 import deepl
-import re
-import matplotlib.pyplot as plt
-from collections import defaultdict
 
 
 class PostListAPIView(generics.ListCreateAPIView):
@@ -196,7 +193,7 @@ def search(request):
     
 def generate_content(content):
     # OpenAI API를 사용하여 내용 생성
-    client = OpenAI(api_key="sk-proj-qy720qAAX3ZeyC36IVAeT3BlbkFJNbOjuVWVnKmTbV7wGmKK")
+    client = OpenAI(api_key="sk-proj-4FolwdtTv4zqZvl1qi4nT3BlbkFJS2iXJ6cYo9TjlHKWopLR")
     
     auth_key = "37093b85-16f8-4819-982f-455ef40922d3:fx"
     translator = deepl.Translator(auth_key)
@@ -220,7 +217,7 @@ def generate_content(content):
     - Other related symptoms (e.g., fever, vomiting, fatigue)
 
     **Response:**
-    - Possible diagnoses with probabilities:
+    - diagnoses:
     - Recommended hospitals:
     - Opinion:
     - Emergency alert: {"Yes" if emergency_alert else "No"}
@@ -229,7 +226,7 @@ def generate_content(content):
     - I have had a headache for 3 days, and the intensity is increasing. It is worse in the morning when I wake up. My neck is stiff, and I have become sensitive to light.
 
     **Example Output:**
-    - Possible diagnoses and probabilities:
+    - diagnoses:
         - Migraine: 60%
         - Tension headache: 30%
         - Meningitis: 10%
@@ -259,6 +256,6 @@ def generate_content(content):
     content_ai = translator.translate_text(response.choices[0].message.content, target_lang="KO")
     print(content_ai)
 
-    system_response = content_ai
+    system_response = content_ai.text
     return system_response
 
