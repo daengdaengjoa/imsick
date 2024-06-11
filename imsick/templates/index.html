@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,31 +9,84 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
         }
         nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
             display: flex;
-            gap: 20px;
+            justify-content: space-between;
         }
         nav a {
             text-decoration: none;
-            color: #333;
+            color: white;
             font-weight: bold;
+            padding: 10px;
+        }
+        nav a:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Welcome to My Web Application</h1>
-        <p>This is the index page.</p>
-        <nav>
-            <a href="/signup/">Sign Up</a>
-            <a href="/login/">Login</a>
-        </nav>
-    </div>
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/makearticle/">Make Article</a>
+        </div>
+        <div id="navbar-right">
+            <!-- Placeholder for login/logout button -->
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Function to check if user is logged in
+        function isLoggedIn() {
+            const accessToken = localStorage.getItem('accessToken');
+            return accessToken !== null;
+        }
+
+        // Function to perform logout
+        async function logout() {
+            try {
+                const response = await axios.post('/api/accounts/logout/', {
+                    refresh: localStorage.getItem('refreshToken')
+                });
+                if (response.status === 205) {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    alert('로그아웃 되었습니다.');
+                    renderLoginButton();
+                }
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                alert('로그아웃에 실패했습니다.');
+            }
+        }
+
+        // Function to render login/logout button based on user's login state
+        function renderLoginButton() {
+            const navbarRight = document.getElementById('navbar-right');
+            navbarRight.innerHTML = ''; // Clear navbar contents
+
+            const loginLogoutButton = document.createElement('a');
+            loginLogoutButton.textContent = isLoggedIn() ? 'Logout' : 'Login';
+            loginLogoutButton.href = '#';
+            loginLogoutButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (isLoggedIn()) {
+                    logout();
+                } else {
+                    window.location.href = '/login/';
+                }
+            });
+
+            navbarRight.appendChild(loginLogoutButton);
+        }
+
+        // Initial rendering
+        renderLoginButton();
+    </script>
 </body>
 </html>

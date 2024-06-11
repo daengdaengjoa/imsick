@@ -193,7 +193,7 @@ def search(request):
     
 def generate_content(content):
     # OpenAI API를 사용하여 내용 생성
-    client = OpenAI(api_key="sk-proj-4FolwdtTv4zqZvl1qi4nT3BlbkFJS2iXJ6cYo9TjlHKWopLR")
+    client = OpenAI(api_key="sk-proj-7h7qhkgFqexlYxpwBnGBT3BlbkFJT7NGRBKtBjPIKB4fCuuQ")
     
     auth_key = "37093b85-16f8-4819-982f-455ef40922d3:fx"
     translator = deepl.Translator(auth_key)

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 작성</title>
+</head>
+<body>
+    <h2>글 작성</h2>
+    <form id="post-form">
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" rows="4" cols="50" required></textarea>
+        </div>
+        <div>
+            <label for="is_published">게시 여부:</label>
+            <input type="checkbox" id="is_published" name="is_published">
+        </div>
+        <div>
+            <button type="submit">작성 완료</button>
+        </div>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('post-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value,
+                is_published: document.getElementById('is_published').checked
+            };
+
+            const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰을 가져옴
+            if (!token) {
+                alert('로그인 후 글을 작성할 수 있습니다.');
+                return;
+            }
+
+            axios.post('/api/articles/', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // 토큰을 Authorization 헤더에 포함
+                }
+            })
+            .then(function(response) {
+                alert('글이 성공적으로 작성되었습니다.');
+                window.location.href = '/'; // 작성 후 메인 페이지로 이동
+            })
+            .catch(function(error) {
+                if (error.response && error.response.status === 403) {
+                    alert('포인트가 부족하여 글을 작성할 수 없습니다.');
+                } else {
+                    console.error('글 작성 오류:', error);
+                    alert('글 작성에 실패했습니다.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
