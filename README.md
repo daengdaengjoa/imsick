@@ -14,8 +14,11 @@
 팀 멤버 구성 🧑‍💻
 
 김환호
+
 김준수
+
 김도연
+
 홍순호
 
 🏗️ 서비스 아키텍처
@@ -25,7 +28,9 @@
 🖥️개발 환경
 
 프론트엔드 : HTML/CSS/JS
+
 백엔드 : Django DRF
+
 DB : Docker
 
 💻 ERD
@@ -40,6 +45,7 @@ DB : Docker
 
 
 🌟 git commit 규칙
+
 feat : 새로운 기능에 대한 커밋
 fix : 버그 수정에 대한
 build : build 관련 파일 수정에 대한 커밋
