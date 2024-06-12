@@ -11,6 +11,7 @@ urlpatterns = [
     path('signup/', TemplateView.as_view(template_name='signup.html'), name='signup'),  # /signup/ 경로로 회원가입 페이지
     path('login/', TemplateView.as_view(template_name='login.html'), name='login'), 
     path('list/', TemplateView.as_view(template_name='list.html'), name='list'), 
+    path('detail/<int:post_pk>/', TemplateView.as_view(template_name='detail.html'), name='detail'), 
     path('makearticle/', TemplateView.as_view(template_name='makearticle.html'), name='makearticle'), 
     path('admin/', admin.site.urls),
     path('api/accounts/', include('accounts.urls')),

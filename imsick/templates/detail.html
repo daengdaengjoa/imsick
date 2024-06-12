@@ -1,75 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Web App</title>
+    <title>글 상세보기</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* 가로 중앙 정렬 */
-            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center;
+            /* 가로 중앙 정렬 */
+            align-items: center;
+            /* 세로 중앙 정렬 */
             height: 100vh;
             background-color: rgb(22, 13, 44);
+            /* 테마 색상 */
+            color: white;
+            /* 전체 텍스트 색상 */
         }
-        .container {
-            text-align: center; /* 이미지를 가운데로 정렬하기 위한 텍스트 가운데 정렬 */
-        }
-        .welcome-image {
-            max-width: 50%; /* 이미지의 최대 폭을 설정하여 크기를 조절합니다. */
-            height: auto; /* 이미지의 높이를 자동으로 조절하여 비율을 유지합니다. */
-        }
+
         nav {
             background-color: #333;
             color: white;
             padding: 10px;
             display: flex;
             justify-content: space-between;
-            position: fixed; /* 페이지의 위쪽에 고정 */
-            top: 0; /* 페이지의 맨 위에 위치 */
-            width: 100%; /* 너비를 화면 전체로 설정 */
+            position: fixed;
+            /* 페이지의 위쪽에 고정 */
+            top: 0;
+            /* 페이지의 맨 위에 위치 */
+            width: 100%;
+            /* 너비를 화면 전체로 설정 */
         }
+
         nav a {
             text-decoration: none;
             color: white;
             font-weight: bold;
             padding: 10px;
         }
+
         nav a:hover {
             background-color: #555;
         }
 
+        .container {
+            width: 80%;
+            /* 전체 폭의 80%를 차지 */
+            margin: auto;
+            padding: 40px;
+            /* 패딩을 더 크게 조정 */
+            background-color: #f0f0f0;
+            /* 입력 폼 배경색 */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            /* 폼 텍스트 색상 */
+        }
 
-        .write-button {
-            margin-top: 20px; /* 버튼과 이미지 사이의 간격 설정 */
+        .container h2 {
+            color: rgb(22, 13, 44);
+            /* 제목 색상 */
         }
-        .rounded-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: rgb(26, 227, 217); 
-            color: white;
-            border: none;
-            border-radius: 20px; /* 모서리를 둥글게 만듭니다. */
-            text-decoration: none;
-            transition: background-color 0.3s ease; /* 배경색 변경에 애니메이션 적용 */
-            font-weight: bold;
-        }
-        .rounded-button:hover {
-            background-color:  rgb(48, 171, 173);/* 마우스 호버시 배경색 변경 */
-        }
-        .rounded-button span {
-            color: black; /* 버튼 내부 글자 색 */
+
+        .post-content {
+            margin: 20px 0;
         }
     </style>
 </head>
+
 <body>
+
     <nav>
         <div>
             <a href="/">Home</a>
-            <a href="/signup/">Signup</a>
             <a href="/makearticle/">Make Diagnosis</a>
             <a href="/list/">List</a>
         </div>
@@ -77,14 +84,38 @@
             <!-- Placeholder for login/logout button -->
         </div>
     </nav>
+
+
     <div class="container">
-        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcTcOgi%2FbtsHWfIbI00%2FdZiTxktuDk5RcgGSLdcxS1%2Fimg.png" alt="Welcome Image" class="welcome-image">
-        <div class="write-button">
-            <a href="/makearticle/" class="rounded-button"><span>진단 받기</span></a>
+        <h2>글 상세보기</h2>
+        <div id="post-detail">
+            <!-- 글 내용이 여기에 동적으로 추가될 것입니다. -->
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+        // 페이지 로드 후 실행될 함수
+        document.addEventListener('DOMContentLoaded', function () {
+            // 글 상세보기 API 호출
+            axios.get('/api/articles/11/') // 글 ID에 따라 동적으로 변경해야 합니다.
+                .then(function (response) {
+                    const post = response.data;
+
+                    // 글 상세 정보를 보여주는 HTML 코드 생성
+                    const postDetailHTML = `
+                        <h3>${post.title}</h3>
+                        <p class="post-content">${post.content}</p>
+                    `;
+
+                    // HTML 코드를 화면에 추가
+                    document.getElementById('post-detail').innerHTML = postDetailHTML;
+                })
+                .catch(function (error) {
+                    console.error('글 상세보기 오류:', error);
+                    alert('글 상세보기에 실패했습니다.');
+                });
+        });
         // Function to check if user is logged in
         function isLoggedIn() {
             const accessToken = localStorage.getItem('accessToken');
@@ -124,7 +155,6 @@
                 alert('로그아웃에 실패했습니다.');
             }
         }
-
         // Function to render login/logout button based on user's login state
         function renderLoginButton() {
             const navbarRight = document.getElementById('navbar-right');
@@ -134,7 +164,7 @@
             if (isLoggedIn()) {
                 loginLogoutButton.textContent = 'Logout';
                 loginLogoutButton.href = '#';
-                loginLogoutButton.addEventListener('click', function(event) {
+                loginLogoutButton.addEventListener('click', function (event) {
                     event.preventDefault();
                     logout();
                 });
@@ -147,9 +177,12 @@
         }
 
         // Ensure the script runs after the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             renderLoginButton();
         });
+
+
     </script>
 </body>
+
 </html>
