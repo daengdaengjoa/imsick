@@ -47,16 +47,29 @@ DB : Docker
 🌟 git commit 규칙
 
 feat : 새로운 기능에 대한 커밋
+
 fix : 버그 수정에 대한
+
 build : build 관련 파일 수정에 대한 커밋
+
 chore : 그 외 수정에 대한 커밋
+
 ci : CI 관련 설정 수정에 대한 커밋
+
 docs : 문서 수정에 대한 커밋
+
 style : 코드 스타일 혹은 포맷 등에 대한 커밋
+
 refactor : 코드 리팩도링에 대한 커밋
+
 test : 테스트 코드 수정에 대한 커밋
+
 design : CSS 등 사용자 UI 디자인 변경
+
 rename : 파일 명 혹은 폴더명 수정 작업
+
 remove : 파일의 삭제 작업을 수행하는 경우
+
 setting: 초기 세팅 작업을 수행하는 경우
+
 assets: assets(image, font...) 관련 작업을 수행하는 경우
