@@ -1,0 +1,94 @@
+<!-- templates/navbar.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공통 네비게이션</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/makearticle/">Make Article</a>
+            <a href="/list/">List</a>
+        </div>
+        <div id="navbar-right">
+            <!-- Placeholder for login/logout button -->
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Function to check if user is logged in
+        function isLoggedIn() {
+            const accessToken = localStorage.getItem('accessToken');
+            return accessToken !== null;
+        }
+
+        // Function to perform logout
+        async function logout() {
+            try {
+                const response = await axios.post('/api/accounts/logout/', {
+                    refresh: localStorage.getItem('refreshToken')
+                });
+                if (response.status === 205) {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    alert('로그아웃 되었습니다.');
+                    renderLoginButton();
+                }
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                alert('로그아웃에 실패했습니다.');
+            }
+        }
+
+        // Function to render login/logout button based on user's login state
+        function renderLoginButton() {
+            const navbarRight = document.getElementById('navbar-right');
+            navbarRight.innerHTML = ''; // Clear navbar contents
+
+            const loginLogoutButton = document.createElement('a');
+            loginLogoutButton.textContent = isLoggedIn() ? 'Logout' : 'Login';
+            loginLogoutButton.href = '#';
+            loginLogoutButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (isLoggedIn()) {
+                    logout();
+                } else {
+                    window.location.href = '/login/';
+                }
+            });
+
+            navbarRight.appendChild(loginLogoutButton);
+        }
+
+        // Initial rendering
+        renderLoginButton();
+    </script>
+</body>
+</html>

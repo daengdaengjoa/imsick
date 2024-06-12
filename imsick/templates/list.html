@@ -9,13 +9,43 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+            height: 100vh;
+            background-color: rgb(22, 13, 44);
         }
+
+        .welcome-image {
+            max-width: 50%; /* 이미지의 최대 폭을 설정하여 크기를 조절합니다. */
+            height: auto; /* 이미지의 높이를 자동으로 조절하여 비율을 유지합니다. */
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            position: fixed; /* 페이지의 위쪽에 고정 */
+            top: 0; /* 페이지의 맨 위에 위치 */
+            width: 100%; /* 너비를 화면 전체로 설정 */
+        }
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+
+
         .container {
             max-width: 800px;
             margin: auto;
             padding: 20px;
-            background-color: white;
+            background-color: rgb(223, 223, 223);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -25,7 +55,7 @@
         }
         .post-item {
             padding: 10px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #292929;
         }
         .post-item:last-child {
             border-bottom: none;
@@ -50,6 +80,17 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/makearticle/">Make Diagnosis</a>
+            <a href="/list/">List</a>
+        </div>
+        <div id="navbar-right">
+            <!-- Placeholder for login/logout button -->
+        </div>
+    </nav>
+
     <div class="container">
         <h1>글 목록</h1>
         <ul class="post-list" id="post-list"></ul>
@@ -103,6 +144,72 @@
         }
 
         fetchPosts();
+
+                // Function to check if user is logged in
+                function isLoggedIn() {
+            const accessToken = localStorage.getItem('accessToken');
+            return accessToken !== null;
+        }
+
+        // Function to perform logout
+        async function logout() {
+            try {
+                const refreshToken = localStorage.getItem('refreshToken');
+                const accessToken = localStorage.getItem('accessToken');
+
+                if (!refreshToken || !accessToken) {
+                    alert('로그인 상태가 아닙니다.');
+                    renderLoginButton();
+                    return;
+                }
+
+                const response = await axios.post('/api/accounts/logout/', {
+                    refresh: refreshToken
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (response.status === 205) {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    alert('로그아웃 되었습니다.');
+                    renderLoginButton();
+                } else {
+                    alert('로그아웃에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                alert('로그아웃에 실패했습니다.');
+            }
+        }
+
+        // Function to render login/logout button based on user's login state
+        function renderLoginButton() {
+            const navbarRight = document.getElementById('navbar-right');
+            navbarRight.innerHTML = ''; // Clear navbar contents
+
+            const loginLogoutButton = document.createElement('a');
+            if (isLoggedIn()) {
+                loginLogoutButton.textContent = 'Logout';
+                loginLogoutButton.href = '#';
+                loginLogoutButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    logout();
+                });
+            } else {
+                loginLogoutButton.textContent = 'Login';
+                loginLogoutButton.href = '/login/';
+            }
+
+            navbarRight.appendChild(loginLogoutButton);
+        }
+
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLoginButton();
+        });
     </script>
 </body>
 </html>

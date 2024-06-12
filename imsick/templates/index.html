@@ -9,6 +9,18 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+            height: 100vh;
+            background-color: rgb(22, 13, 44);
+        }
+        .container {
+            text-align: center; /* 이미지를 가운데로 정렬하기 위한 텍스트 가운데 정렬 */
+        }
+        .welcome-image {
+            max-width: 50%; /* 이미지의 최대 폭을 설정하여 크기를 조절합니다. */
+            height: auto; /* 이미지의 높이를 자동으로 조절하여 비율을 유지합니다. */
         }
         nav {
             background-color: #333;
@@ -16,6 +28,9 @@
             padding: 10px;
             display: flex;
             justify-content: space-between;
+            position: fixed; /* 페이지의 위쪽에 고정 */
+            top: 0; /* 페이지의 맨 위에 위치 */
+            width: 100%; /* 너비를 화면 전체로 설정 */
         }
         nav a {
             text-decoration: none;
@@ -26,20 +41,47 @@
         nav a:hover {
             background-color: #555;
         }
+
+
+        .write-button {
+            margin-top: 20px; /* 버튼과 이미지 사이의 간격 설정 */
+        }
+        .rounded-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgb(26, 227, 217); 
+            color: white;
+            border: none;
+            border-radius: 20px; /* 모서리를 둥글게 만듭니다. */
+            text-decoration: none;
+            transition: background-color 0.3s ease; /* 배경색 변경에 애니메이션 적용 */
+            font-weight: bold;
+        }
+        .rounded-button:hover {
+            background-color:  rgb(48, 171, 173);/* 마우스 호버시 배경색 변경 */
+        }
+        .rounded-button span {
+            color: black; /* 버튼 내부 글자 색 */
+        }
     </style>
 </head>
 <body>
     <nav>
         <div>
             <a href="/">Home</a>
-            <a href="/makearticle/">Make Article</a>
+            <a href="/makearticle/">Make Diagnosis</a>
             <a href="/list/">List</a>
         </div>
         <div id="navbar-right">
             <!-- Placeholder for login/logout button -->
         </div>
     </nav>
-
+    <div class="container">
+        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcTcOgi%2FbtsHWfIbI00%2FdZiTxktuDk5RcgGSLdcxS1%2Fimg.png" alt="Welcome Image" class="welcome-image">
+        <div class="write-button">
+            <a href="/makearticle/" class="rounded-button"><span>진단 받기</span></a>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         // Function to check if user is logged in
