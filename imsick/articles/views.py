@@ -13,7 +13,7 @@ import deepl
 
 
 class PostListAPIView(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_published=True)
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     
