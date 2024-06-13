@@ -2,7 +2,7 @@
 
 # 🩺 Project: imsick
 #### Health Management Platform with AI-based Diagnosis and Recommendations
-
+http://127.0.0.1:8000/
 <br>
 
 ## 🚀 Project Introduction
