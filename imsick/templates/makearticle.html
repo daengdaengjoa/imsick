@@ -180,7 +180,8 @@
             })
                 .then(function (response) {
                     alert('글이 성공적으로 작성되었습니다.');
-                    window.location.href = '/'; // 작성 후 메인 페이지로 이동
+                    const postId = response.data.id; // 서버 응답에서 작성된 글의 ID를 가져옴
+                    window.location.href = `/detail/${postId}/`;
                 })
                 .catch(function (error) {
                     if (error.response && error.response.status === 403) {
@@ -198,7 +199,8 @@
                                 })
                                     .then(function (response) {
                                         alert('글이 성공적으로 작성되었습니다.');
-                                        window.location.href = '/'; // 작성 후 메인 페이지로 이동
+                                        const postId = response.data.id; // 서버 응답에서 작성된 글의 ID를 가져옴
+                                        window.location.href = `/detail/${postId}/`; // 작성 후 메인 페이지로 이동
                                     })
                                     .catch(function (error) {
                                         console.error('글 작성 오류:', error);
