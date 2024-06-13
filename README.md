@@ -11,7 +11,7 @@ imsick is a health management platform that leverages AI for diagnosis and healt
 <br>
 
 ## ⏱️ Development Timeline
-- 2023.10.01 (Mon) - 2024.01.31 (Wed)
+- 2024.05. (Mon) - 2024.06.13 (Wed)
   - **Project Planning and Ideation**: Define the overall direction of the project tailored to user needs, outlining required features and documenting them.
   - **Frontend and Backend Development**: Develop frontend and backend modules tailored to user interactions and set up a demo environment to integrate project modules.
 
