@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            /* 가로 중앙 정렬 */
+            align-items: center;
+            /* 세로 중앙 정렬 */
+            height: 100vh;
+            background-color: rgb(22, 13, 44);
+            /* 테마 색상 */
+            color: white;
+            /* 전체 텍스트 색상 */
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            position: fixed;
+            /* 페이지의 위쪽에 고정 */
+            top: 0;
+            /* 페이지의 맨 위에 위치 */
+            width: 100%;
+            /* 너비를 화면 전체로 설정 */
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            width: 80%;
+            /* 전체 폭의 80%를 차지 */
+            margin: auto;
+            padding: 40px;
+            /* 패딩을 더 크게 조정 */
+            background-color: #f0f0f0;
+            /* 입력 폼 배경색 */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            /* 폼 텍스트 색상 */
+        }
+
+        .container h2 {
+            color: rgb(22, 13, 44);
+            /* 제목 색상 */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: calc(100% - 10px);
+            /* 입력 필드 너비 조절 */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            /* 텍스트 에어리어의 크기 조절 비활성화 */
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(1.5);
+            /* 체크박스 크기 조절 */
+            vertical-align: middle;
+            /* 텍스트와 세로 중앙 정렬 */
+        }
+
+        button[type="submit"] {
+            background-color: rgb(26, 227, 217);
+            /* 버튼 배경색 */
+            color: white;
+            /* 버튼 텍스트 색상 */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* 배경색 변경에 애니메이션 적용 */
+        }
+
+        button[type="submit"]:hover {
+            background-color: rgb(53, 215, 217);
+            /* 마우스 호버시 배경색 변경 */
+        }
+
+        #post-form>div:last-child {
+            margin-top: 40px;
+            /* 위쪽 여백 추가 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/makearticle/">Make Diagnosis</a>
+            <a href="/list/">List</a>
+        </div>
+        <div id="navbar-right">
+            <!-- Placeholder for login/logout button -->
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h2>진단받기</h2>
+        <form id="post-form">
+            <div>
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div>
+                <label for="content">증상:</label>
+                <textarea id="content" name="content" rows="4" required></textarea>
+            </div>
+            <div>
+                <label for="is_published">공개 여부(공개시 10 point+):</label>
+                <input type="checkbox" id="is_published" name="is_published">
+            </div>
+            <div>
+                <button type="submit">작성 완료</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('post-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value,
+                is_published: document.getElementById('is_published').checked
+            };
+
+            const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰을 가져옴
+            if (!token) {
+                alert('로그인 후 글을 작성할 수 있습니다.');
+                return;
+            }
+
+            axios.post('/api/articles/', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // 토큰을 Authorization 헤더에 포함
+                }
+            })
+                .then(function (response) {
+                    alert('글이 성공적으로 작성되었습니다.');
+                    const postId = response.data.id; // 서버 응답에서 작성된 글의 ID를 가져옴
+                    window.location.href = `/detail/${postId}/`;
+                })
+                .catch(function (error) {
+                    if (error.response && error.response.status === 403) {
+                        alert('포인트가 부족하여 글을 작성할 수 없습니다.');
+                    } else if (error.response && error.response.status === 401) {
+                        // 액세스 토큰이 만료된 경우 리프레시 토큰으로 재시도
+                        refreshAccessToken()
+                            .then(newToken => {
+                                // 새로운 액세스 토큰으로 재시도
+                                axios.post('/api/articles/', formData, {
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${newToken}`
+                                    }
+                                })
+                                    .then(function (response) {
+                                        alert('글이 성공적으로 작성되었습니다.');
+                                        const postId = response.data.id; // 서버 응답에서 작성된 글의 ID를 가져옴
+                                        window.location.href = `/detail/${postId}/`; // 작성 후 메인 페이지로 이동
+                                    })
+                                    .catch(function (error) {
+                                        console.error('글 작성 오류:', error);
+                                        alert('글 작성에 실패했습니다.');
+                                    });
+                            })
+                            .catch(error => {
+                                alert('로그인이 만료되었습니다. 다시 로그인해 주세요.');
+                                window.location.href = '/login/';
+                            });
+                    } else {
+                        console.error('글 작성 오류:', error);
+                        alert('글 작성에 실패했습니다.');
+                    }
+                });
+        });
+
+        // 새로운 액세스 토큰을 가져오는 함수
+        function refreshAccessToken() {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (!refreshToken) {
+                return Promise.reject('리프레시 토큰이 없습니다.');
+            }
+
+            return axios.post('/api/token/refresh/', {
+                refresh: refreshToken
+            })
+                .then(response => {
+                    const newAccessToken = response.data.access;
+                    localStorage.setItem('accessToken', newAccessToken); // 새로운 액세스 토큰 저장
+                    return newAccessToken;
+                })
+                .catch(error => {
+                    console.error('액세스 토큰 갱신 오류:', error);
+                    return Promise.reject('액세스 토큰 갱신에 실패했습니다.');
+                });
+        }
+        function isLoggedIn() {
+            const accessToken = localStorage.getItem('accessToken');
+            return accessToken !== null;
+        }
+
+        // Function to perform logout
+        async function logout() {
+            try {
+                const refreshToken = localStorage.getItem('refreshToken');
+                const accessToken = localStorage.getItem('accessToken');
+
+                if (!refreshToken || !accessToken) {
+                    alert('로그인 상태가 아닙니다.');
+                    renderLoginButton();
+                    return;
+                }
+
+                const response = await axios.post('/api/accounts/logout/', {
+                    refresh: refreshToken
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (response.status === 205) {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    alert('로그아웃 되었습니다.');
+                    renderLoginButton();
+                } else {
+                    alert('로그아웃에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                alert('로그아웃에 실패했습니다.');
+            }
+        }
+
+        // Function to render login/logout button based on user's login state
+        function renderLoginButton() {
+            const navbarRight = document.getElementById('navbar-right');
+            navbarRight.innerHTML = ''; // Clear navbar contents
+
+            const loginLogoutButton = document.createElement('a');
+            if (isLoggedIn()) {
+                loginLogoutButton.textContent = 'Logout';
+                loginLogoutButton.href = '#';
+                loginLogoutButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    logout();
+                });
+            } else {
+                loginLogoutButton.textContent = 'Login';
+                loginLogoutButton.href = '/login/';
+            }
+
+            navbarRight.appendChild(loginLogoutButton);
+        }
+
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLoginButton();
+        });
+    </script>
+</body>
+
+</html>

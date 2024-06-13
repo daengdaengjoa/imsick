@@ -21,6 +21,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
+            "id",
             "title",
             "content",
             "content_ai",
@@ -28,15 +29,12 @@ class PostSerializer(serializers.ModelSerializer):
             "category",
             "view_count",
             "like_counts",
+            "created_at",
+            "updated_at",
             "is_published",
         ]
         read_only_fields = ["author", "category",]
 
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation.pop('content', None)
-        return representation
 
 class PostDetailSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True, required=False)

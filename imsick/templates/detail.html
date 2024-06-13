@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 상세보기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            /* 가로 중앙 정렬 */
+            align-items: center;
+            /* 세로 중앙 정렬 */
+            height: 100vh;
+            background-color: rgb(22, 13, 44);
+            /* 테마 색상 */
+            color: white;
+            /* 전체 텍스트 색상 */
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            position: fixed;
+            /* 페이지의 위쪽에 고정 */
+            top: 0;
+            /* 페이지의 맨 위에 위치 */
+            width: 100%;
+            /* 너비를 화면 전체로 설정 */
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            width: 80%;
+            /* 전체 폭의 80%를 차지 */
+            margin: auto;
+            padding: 40px;
+            /* 패딩을 더 크게 조정 */
+            background-color: #f0f0f0;
+            /* 입력 폼 배경색 */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            /* 폼 텍스트 색상 */
+        }
+
+        .container h2 {
+            color: rgb(22, 13, 44);
+            /* 제목 색상 */
+        }
+
+        .post-content {
+            margin: 20px 0;
+        }
+
+        .post-ai-content {
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .post-ai-content strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #map {
+            width: 50%;
+            height: 400px;
+            /* 맵의 높이 설정 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/makearticle/">Make Diagnosis</a>
+            <a href="/list/">List</a>
+        </div>
+        <div id="navbar-right">
+            <!-- Placeholder for login/logout button -->
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="post-detail">
+            <!-- 글 내용이 여기에 동적으로 추가될 것입니다. -->
+        </div>
+        <div id="map"></div> <!-- 카카오 맵이 표시될 요소 -->
+
+        <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a43a385c7a0d9d3ba951b6c8bbb3720a&libraries=services"></script>
+        <script>
+            // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+            var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+                    level: 3 // 지도의 확대 레벨
+                };
+
+            // 지도를 생성합니다    
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 장소 검색 객체를 생성합니다
+            var ps = new kakao.maps.services.Places();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    var userLatLng = new kakao.maps.LatLng(lat, lon);
+
+                    map.setCenter(userLatLng);
+
+                    // 주변 병원 검색
+                    var places = new kakao.maps.services.Places();
+                    places.keywordSearch('병원', function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            for (var i = 0; i < result.length; i++) {
+                                displayMarker(result[i]);
+                            }
+                        }
+                    }, {
+                        location: userLatLng,
+                        radius: 5000 // 반경 5km 이내의 병원 검색
+                    });
+
+                    // 사용자 위치에 마커 표시
+                    var userMarker = new kakao.maps.Marker({
+                        map: map,
+                        position: userLatLng,
+                        title: '현재 위치'
+                    });
+
+                }, function (error) {
+                    console.error('Geolocation 오류: ', error);
+                    alert('현재 위치를 가져올 수 없습니다.');
+                });
+            } else {
+                alert('Geolocation을 지원하지 않는 브라우저입니다.');
+            }
+
+
+            // 지도에 마커를 표시하는 함수입니다
+            function displayMarker(place) {
+
+                // 마커를 생성하고 지도에 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: new kakao.maps.LatLng(place.y, place.x)
+                });
+
+                // 마커에 클릭이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+                    infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+                    infowindow.open(map, marker);
+                });
+            }
+        </script>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function getPostIdFromUrl() {
+            const url = window.location.href;
+            const urlParts = url.split('/');
+            return urlParts[urlParts.length - 2];
+        }
+
+        // 페이지 로드 후 실행될 함수
+        document.addEventListener('DOMContentLoaded', function () {
+            const postId = getPostIdFromUrl(); // URL에서 postId 가져오기
+
+            axios.get(`/api/articles/${postId}/`) // 동적으로 postId를 사용하여 API 호출
+                .then(function (response) {
+                    const post = response.data;
+
+                    // AI 생성 콘텐츠에서 줄바꿈 처리
+                    const contentAiLines = post.content_ai.split('\n');
+                    const contentAiHTML = contentAiLines.map(line => {
+                        if (line.trim().startsWith('-')) {
+                            return `<li>${line.trim().substring(2)}</li>`;
+                        } else if (line.trim().startsWith('    -')) {
+                            return `<ul><li>${line.trim().substring(6)}</li></ul>`;
+                        } else {
+                            return `<p>${line.trim()}</p>`;
+                        }
+                    }).join('');
+
+                    // 글 상세 정보를 보여주는 HTML 코드 생성
+                    const postDetailHTML = `
+                        <h2>${post.title}</h2>
+                        <p class="post-content">증상: ${post.content}</p>
+                        <p class="post-author">작성자: ${post.author}</p>
+                        <div class="post-ai-content">
+                            <strong>AI Diagnosis:</strong>
+                            ${contentAiHTML}
+                        </div>                        
+                        <p class="post-date">작성일: ${new Date(post.created_at).toLocaleDateString()}</p>
+                        <p class="post-view-count">조회수: ${post.view_count}</p>
+                        <p class="post-like-count">좋아요: ${post.like_counts}</p>
+                        <button id="likeButton">좋아요</button>
+                    `;
+
+
+                    // HTML 코드를 화면에 추가
+                    document.getElementById('post-detail').innerHTML = postDetailHTML;
+
+                    document.getElementById('likeButton').addEventListener('click', function () {
+                    likePost(postId);
+                });
+                })
+                .catch(function (error) {
+                    console.error('글 상세보기 오류:', error);
+                    alert('글 상세보기에 실패했습니다.');
+                });
+        });
+
+        
+
+        // Function to check if user is logged in
+        function isLoggedIn() {
+            const accessToken = localStorage.getItem('accessToken');
+            return accessToken !== null;
+        }
+
+        // Function to perform logout
+        async function logout() {
+            try {
+                const refreshToken = localStorage.getItem('refreshToken');
+                const accessToken = localStorage.getItem('accessToken');
+
+                if (!refreshToken || !accessToken) {
+                    alert('로그인 상태가 아닙니다.');
+                    renderLoginButton();
+                    return;
+                }
+
+                const response = await axios.post('/api/accounts/logout/', {
+                    refresh: refreshToken
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (response.status === 205) {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    alert('로그아웃 되었습니다.');
+                    renderLoginButton();
+                } else {
+                    alert('로그아웃에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                alert('로그아웃에 실패했습니다.');
+            }
+        }
+
+        // Function to render login/logout button based on user's login state
+        function renderLoginButton() {
+            const navbarRight = document.getElementById('navbar-right');
+            navbarRight.innerHTML = ''; // Clear navbar contents
+
+            const loginLogoutButton = document.createElement('a');
+            if (isLoggedIn()) {
+                loginLogoutButton.textContent = 'Logout';
+                loginLogoutButton.href = '#';
+                loginLogoutButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    logout();
+                });
+            } else {
+                loginLogoutButton.textContent = 'Login';
+                loginLogoutButton.href = '/login/';
+            }
+
+            navbarRight.appendChild(loginLogoutButton);
+        }
+
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            renderLoginButton();
+        });
+    </script>
+</body>
+
+</html>
