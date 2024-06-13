@@ -51,11 +51,12 @@ imsick is a health management platform that leverages AI for diagnosis and healt
 <br>
 
 ## 📝 Project Architecture
-- **S.A. Notion**: [S.A. Notion Link](https://www.notion.so/teamsparta/S-A-8-a04adb1fb1884d80aa92feea44fb70d0)
+![image](https://github.com/daengdaengjoa/12-final/assets/156053546/f53e307e-3a3c-45fb-8bdd-91105e146cb3)
+![image](https://github.com/daengdaengjoa/12-final/assets/156053546/52652a3a-813c-43d9-a90d-2646a4e8cb95)
+![image](https://github.com/daengdaengjoa/12-final/assets/156053546/fa7d39e2-e8b3-4826-b775-c39a190d166d)
 
-![Project Architecture](https://github.com/daengdaengjoa/Team-8/assets/157565164/a8ab58ef-e818-44f3-a27e-32b8c3ed7c40)
 
-- **Demo Video**: [Watch the Demo](https://www.youtube.com/watch?v=lOL_L8jN1uk)
+- **Demo Video**: [Watch the Demo](https://www.youtube.com/watch?v=mLu8_DXl94U&t=6s)
 
 <br>
 
