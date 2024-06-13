@@ -224,17 +224,24 @@
                         <p class="post-date">작성일: ${new Date(post.created_at).toLocaleDateString()}</p>
                         <p class="post-view-count">조회수: ${post.view_count}</p>
                         <p class="post-like-count">좋아요: ${post.like_counts}</p>
+                        <button id="likeButton">좋아요</button>
                     `;
 
 
                     // HTML 코드를 화면에 추가
                     document.getElementById('post-detail').innerHTML = postDetailHTML;
+
+                    document.getElementById('likeButton').addEventListener('click', function () {
+                    likePost(postId);
+                });
                 })
                 .catch(function (error) {
                     console.error('글 상세보기 오류:', error);
                     alert('글 상세보기에 실패했습니다.');
                 });
         });
+
+        
 
         // Function to check if user is logged in
         function isLoggedIn() {

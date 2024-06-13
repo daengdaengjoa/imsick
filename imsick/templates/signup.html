@@ -96,10 +96,6 @@
                 <input type="number" id="age" name="age" min="1" max="100" value="1" required>
             </div>
             <div class="form-group">
-                <label for="point">포인트</label>
-                <input type="number" id="point" name="point" min="0" max="1000" value="0" required>
-            </div>
-            <div class="form-group">
                 <button type="submit">회원가입</button>
             </div>
             <div class="error" id="error-message"></div>
@@ -119,7 +115,6 @@
                 email: document.getElementById('email').value,
                 gender: document.getElementById('gender').value,
                 age: document.getElementById('age').value,
-                point: document.getElementById('point').value
             };
 
             try {
