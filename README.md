@@ -74,6 +74,9 @@ imsick is a health management platform that leverages AI for diagnosis and healt
 - Users can directly get AI-based diagnoses and hospital recommendations based on their symptoms.
 - AI-generated diagnoses and recommendations are displayed within the page.
 - **Cost Efficiency**: By integrating DeepL for certain translations, we've reduced OpenAI token usage costs by more than 30%, making our AI services more sustainable and cost-effective.
+- ![image](https://github.com/daengdaengjoa/12-final/assets/156053546/3c967626-721f-4e1d-a37f-f56589ff2a1a)
+- ![image](https://github.com/daengdaengjoa/12-final/assets/156053546/2ff57dd9-edbc-496d-be0e-7a8005276ee4)
+
 
 ### 4. Sign Up, Log In
 - Membership registration is mandatory for first-time users, enabling them to log in and access the site's features.
