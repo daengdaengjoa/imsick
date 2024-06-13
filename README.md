@@ -21,9 +21,10 @@ imsick is a health management platform that leverages AI for diagnosis and healt
 ## 🧑‍🤝‍🧑 Development Team: Team-8 
 - **김도연** : 간단한 프론트엔드 및 현재위치 기반 병원안내
 - **김환호** : 간단한 프론트엔드 및 현재위치 기반 병원안내
-- **김준수** : 백엔드 - Accounts(회원가입, 로그인, 탈퇴, 수정) Articles(전체CRUD, Openai-API, Deepl api ,프롬프팅)
-프론트엔드 - 전체 페이지 
-배포
+- **김준수** : 백엔드 - Accounts(회원가입, 로그인, 탈퇴, 수정)
+- Articles(전체CRUD, Openai-API, Deepl api ,프롬프팅)
+- 프론트엔드 - 전체 페이지
+- 배포
 - **홍순호** : 백엔드- Articles(게시물, 댓글, 좋아요CRUD)
 
 
