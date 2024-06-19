@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)4$=2f07jhpd$d9hy#gik3ny)8zu9mjc4v-(#&ejhi0nz!xg0u'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
     "43.201.49.32",
@@ -41,10 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django-environ',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
     'articles',
+    
 ]
 
 MIDDLEWARE = [
@@ -61,7 +69,7 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 ROOT_URLCONF = 'imsick.urls'
 
-import os
+
 
 TEMPLATES = [
     {
@@ -86,10 +94,15 @@ WSGI_APPLICATION = 'imsick.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+	'default':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'data_imsick_db',
+        'USER': 'root',
+        'PASSWORD': 'imsick123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        }
+    
 }
 
 AUTH_USER_MODEL = "accounts.User"
