@@ -27,6 +27,7 @@ imsick is a health management platform that leverages AI for diagnosis and healt
 - 배포
 - **홍순호** : 백엔드- Articles(게시물, 댓글, 좋아요CRUD)
 
+<br>
 
 # ImSick Project Description
 
